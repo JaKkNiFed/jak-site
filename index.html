@@ -143,27 +143,40 @@
 
   /* social link grid */
   .social-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-    gap:14px;
-    max-width:680px;
+    display:flex;
+    flex-wrap:nowrap;
+    gap:10px;
+    max-width:720px;
     margin:0 auto;
   }
   .social-btn{
-    display:flex;align-items:center;gap:10px;justify-content:center;
+    display:flex;align-items:center;gap:8px;justify-content:center;
+    flex:1 1 0;
+    min-width:0;
     background:var(--panel);
     border:1px solid var(--panel-border);
     border-radius:var(--radius);
-    padding:14px 16px;
+    padding:14px 10px;
     font-size:0.85rem;
     font-weight:700;
+    white-space:nowrap;
+    overflow:hidden;
     transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
   }
+  .social-btn span{overflow:hidden;text-overflow:ellipsis;}
   .social-btn svg{width:18px;height:18px;flex:none;}
   .social-btn:hover{
     transform:translateY(-3px);
     border-color:var(--orange);
     box-shadow:0 8px 24px rgba(255,122,48,0.18);
+  }
+  @media (max-width:640px){
+    .social-btn{padding:12px 6px;font-size:0.7rem;gap:5px;}
+    .social-btn svg{width:16px;height:16px;}
+  }
+  @media (max-width:420px){
+    .social-btn span{display:none;}
+    .social-btn{padding:14px 4px;}
   }
 
   /* services */
