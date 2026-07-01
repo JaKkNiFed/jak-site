@@ -96,21 +96,13 @@
     position:relative;
     display:grid;place-items:center;
     background:var(--bg-soft);
-    animation:surge-pulse 3s ease-in-out infinite;
+    box-shadow:0 0 0 3px var(--bg), 0 0 0 4px rgba(252,97,3,0.45);
   }
   .avatar img{
     width:128px;height:128px;border-radius:50%;
     object-fit:cover;
     border:3px solid var(--bg);
     position:relative;
-  }
-  @keyframes surge-pulse{
-    0%,100%{
-      box-shadow:0 0 0 3px var(--bg), 0 0 0 4px rgba(252,97,3,0.4), 0 0 30px rgba(252,97,3,0.2);
-    }
-    50%{
-      box-shadow:0 0 0 3px var(--bg), 0 0 0 4px rgba(252,97,3,0.65), 0 0 55px rgba(252,97,3,0.45), 0 0 85px rgba(252,97,3,0.15);
-    }
   }
 
   /* ambient ember field — embers drift up across the whole page continuously */
@@ -176,7 +168,7 @@
   }
 
   @media (prefers-reduced-motion: reduce){
-    .avatar, .ember, .ribbon{ animation:none !important; }
+    .ember, .ribbon{ animation:none !important; }
     .ember-field, .ribbon-field{ display:none; }
   }
 
