@@ -11,7 +11,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Oswald:ital,wght@0,700;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -114,6 +114,46 @@
     padding:4px 12px;
     border-radius:999px;
   }
+
+  /* capability banner — brand banner style, matches Discord profile card */
+  .capability-banner{
+    max-width:640px;
+    margin:40px auto 0;
+    padding:0 24px;
+    text-align:center;
+  }
+  .capability-title{
+    font-family:'Oswald', sans-serif;
+    font-style:italic;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:clamp(1.15rem,4.2vw,1.6rem);
+    line-height:1.3;
+    color:var(--text);
+    letter-spacing:0.5px;
+  }
+  .capability-title .amp{color:var(--orange);}
+  .capability-line{
+    height:3px;
+    background:var(--orange);
+    width:100%;
+    margin:16px auto 0;
+    border-radius:2px;
+  }
+  .capability-icons{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:26px;
+    margin-top:22px;
+    flex-wrap:wrap;
+  }
+  .cap-icon{
+    width:30px;height:30px;
+    display:grid;place-items:center;
+    flex:none;
+  }
+  .cap-icon svg{width:100%;height:100%;}
 
   section{padding:36px 24px;}
   .section-title{
@@ -275,6 +315,32 @@
     <h1 class="name">JAK</h1>
     <p class="tagline">Ask questions or hire me for Platform Content Moderation, Cyber-Security, Discord Server/Bot Development, and more.</p>
     <span class="username">@jakknifed</span>
+
+    <div class="capability-banner">
+      <h2 class="capability-title">Content Moderation <span class="amp">&amp;</span> Community Management</h2>
+      <div class="capability-line"></div>
+      <div class="capability-icons">
+        <span class="cap-icon" title="Configuration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#f3f2ef" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2.5 12h3M18.5 12h3M4.9 19.1l2.1-2.1M17 7l2.1-2.1"/></svg>
+        </span>
+        <span class="cap-icon" title="Tools & Setup">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fc6103" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 005.4-5.4l-2.2 2.2-2-2 2.2-2.2z"/></svg>
+        </span>
+        <span class="cap-icon" title="Security">
+          <svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5 3.5 8.5 8 10z" fill="#f3f2ef"/><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10z" fill="#fc6103"/></svg>
+        </span>
+        <span class="cap-icon" title="Moderation & Monitoring">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fc6103" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V5.5a1 1 0 011-1h2.5M20 8V5.5a1 1 0 00-1-1h-2.5M4 16v2.5a1 1 0 001 1h2.5M20 16v2.5a1 1 0 01-1 1h-2.5"/><ellipse cx="12" cy="12" rx="5" ry="3"/><circle cx="12" cy="12" r="1.2" fill="#fc6103"/></svg>
+        </span>
+        <span class="cap-icon" title="Development">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 4.5L3 12l6 7.5" stroke="#f3f2ef" stroke-width="1.7"/>
+            <path d="M14 3.5l-4 17" stroke="#fc6103" stroke-width="1.7"/>
+            <path d="M15 4.5l6 7.5-6 7.5" stroke="#f3f2ef" stroke-width="1.7"/>
+          </svg>
+        </span>
+      </div>
+    </div>
   </header>
 
   <section id="links">
