@@ -96,15 +96,71 @@
     position:relative;
     display:grid;place-items:center;
     background:var(--bg-soft);
-    box-shadow:
-      0 0 0 3px var(--bg),
-      0 0 0 4px rgba(252,97,3,0.4),
-      0 0 30px rgba(252,97,3,0.2);
+    animation:surge-pulse 3s ease-in-out infinite;
+  }
+  /* rotating energy-ray burst behind the avatar — "power surge" aura */
+  .avatar::before{
+    content:"";
+    position:absolute;
+    inset:-34px;
+    border-radius:50%;
+    z-index:-1;
+    filter:blur(2px);
+    background:conic-gradient(from 0deg,
+      transparent 0deg, rgba(252,97,3,0.4) 8deg, transparent 22deg,
+      transparent 62deg, rgba(252,97,3,0.4) 70deg, transparent 84deg,
+      transparent 132deg, rgba(30,140,190,0.32) 140deg, transparent 154deg,
+      transparent 202deg, rgba(252,97,3,0.4) 210deg, transparent 224deg,
+      transparent 272deg, rgba(252,97,3,0.32) 280deg, transparent 294deg,
+      transparent 340deg, rgba(30,140,190,0.28) 348deg, transparent 360deg);
+    animation:surge-spin 16s linear infinite;
   }
   .avatar img{
     width:128px;height:128px;border-radius:50%;
     object-fit:cover;
     border:3px solid var(--bg);
+    position:relative;
+  }
+  @keyframes surge-pulse{
+    0%,100%{
+      box-shadow:0 0 0 3px var(--bg), 0 0 0 4px rgba(252,97,3,0.4), 0 0 30px rgba(252,97,3,0.2);
+    }
+    50%{
+      box-shadow:0 0 0 3px var(--bg), 0 0 0 4px rgba(252,97,3,0.65), 0 0 55px rgba(252,97,3,0.45), 0 0 85px rgba(252,97,3,0.15);
+    }
+  }
+  @keyframes surge-spin{ to{ transform:rotate(360deg); } }
+
+  /* ambient ember field — embers drift up across the whole page continuously */
+  .ember-field{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .ember{
+    position:absolute;
+    bottom:-12px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,180,120,0.95), rgba(252,97,3,0.55) 45%, transparent 75%);
+    box-shadow:0 0 6px 2px rgba(252,97,3,0.45);
+    opacity:0;
+    animation-name:ember-rise;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes ember-rise{
+    0%{ transform:translate(0,0); opacity:0; }
+    8%{ opacity:0.9; }
+    50%{ transform:translate(var(--drift,10px), -55vh); }
+    92%{ opacity:0.45; }
+    100%{ transform:translate(calc(var(--drift,10px) * 2), -108vh); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .avatar, .avatar::before, .ember{ animation:none !important; }
+    .ember-field{ display:none; }
   }
 
   h1.name{
@@ -406,6 +462,37 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ============================================================
+     "Power Surge" ambient ember field — floating orange embers drift
+     upward across the whole page continuously (whole-page ambient
+     energy). Skips entirely for users who prefer reduced motion.
+     Tune EMBER_COUNT for more/fewer particles.
+     ============================================================ */
+  (function(){
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const EMBER_COUNT = 28;
+    const field = document.createElement('div');
+    field.className = 'ember-field';
+    field.setAttribute('aria-hidden', 'true');
+    document.body.prepend(field);
+
+    for (let i = 0; i < EMBER_COUNT; i++){
+      const ember = document.createElement('span');
+      ember.className = 'ember';
+      const size = 3 + Math.random() * 5;
+      const duration = 10 + Math.random() * 14;
+      const drift = Math.random() * 60 - 30;
+      ember.style.width = size + 'px';
+      ember.style.height = size + 'px';
+      ember.style.left = (Math.random() * 100) + '%';
+      ember.style.setProperty('--drift', drift + 'px');
+      ember.style.animationDuration = duration + 's';
+      ember.style.animationDelay = '-' + (Math.random() * duration) + 's';
+      field.appendChild(ember);
+    }
+  })();
 
   /* ============================================================
      Scroll-linked background spin — rotates the background clockwise
