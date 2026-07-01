@@ -98,23 +98,6 @@
     background:var(--bg-soft);
     animation:surge-pulse 3s ease-in-out infinite;
   }
-  /* rotating energy-ray burst behind the avatar — "power surge" aura */
-  .avatar::before{
-    content:"";
-    position:absolute;
-    inset:-34px;
-    border-radius:50%;
-    z-index:-1;
-    filter:blur(2px);
-    background:conic-gradient(from 0deg,
-      transparent 0deg, rgba(252,97,3,0.4) 8deg, transparent 22deg,
-      transparent 62deg, rgba(252,97,3,0.4) 70deg, transparent 84deg,
-      transparent 132deg, rgba(30,140,190,0.32) 140deg, transparent 154deg,
-      transparent 202deg, rgba(252,97,3,0.4) 210deg, transparent 224deg,
-      transparent 272deg, rgba(252,97,3,0.32) 280deg, transparent 294deg,
-      transparent 340deg, rgba(30,140,190,0.28) 348deg, transparent 360deg);
-    animation:surge-spin 16s linear infinite;
-  }
   .avatar img{
     width:128px;height:128px;border-radius:50%;
     object-fit:cover;
@@ -129,7 +112,6 @@
       box-shadow:0 0 0 3px var(--bg), 0 0 0 4px rgba(252,97,3,0.65), 0 0 55px rgba(252,97,3,0.45), 0 0 85px rgba(252,97,3,0.15);
     }
   }
-  @keyframes surge-spin{ to{ transform:rotate(360deg); } }
 
   /* ambient ember field — embers drift up across the whole page continuously */
   .ember-field{
@@ -158,9 +140,44 @@
     100%{ transform:translate(calc(var(--drift,10px) * 2), -108vh); opacity:0; }
   }
 
+  /* random energy-surge ribbons — thin glowing streaks that flash across
+     random positions/angles at random intervals, whole-page ambient */
+  .ribbon-field{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .ribbon{
+    position:absolute;
+    top:0;left:0;
+    height:2.5px;
+    border-radius:2px;
+    opacity:0;
+    transform-origin:center;
+    animation-name:ribbon-surge;
+    animation-timing-function:ease-in-out;
+    animation-iteration-count:infinite;
+  }
+  .ribbon.c-orange{
+    background:linear-gradient(90deg, transparent, rgba(252,97,3,0.85), rgba(255,210,160,0.95), rgba(252,97,3,0.85), transparent);
+    box-shadow:0 0 14px 2px rgba(252,97,3,0.55);
+  }
+  .ribbon.c-cyan{
+    background:linear-gradient(90deg, transparent, rgba(30,140,190,0.8), rgba(180,225,240,0.9), rgba(30,140,190,0.8), transparent);
+    box-shadow:0 0 14px 2px rgba(30,140,190,0.5);
+  }
+  @keyframes ribbon-surge{
+    0%{ opacity:0; transform:translate(var(--rx), var(--ry)) rotate(var(--rrot)) scaleX(0.15); }
+    18%{ opacity:1; transform:translate(var(--rx), var(--ry)) rotate(var(--rrot)) scaleX(1); }
+    55%{ opacity:0.8; transform:translate(var(--rx), var(--ry)) rotate(var(--rrot)) scaleX(1.05); }
+    100%{ opacity:0; transform:translate(var(--rx), var(--ry)) rotate(var(--rrot)) scaleX(1.2); }
+  }
+
   @media (prefers-reduced-motion: reduce){
-    .avatar, .avatar::before, .ember{ animation:none !important; }
-    .ember-field{ display:none; }
+    .avatar, .ember, .ribbon{ animation:none !important; }
+    .ember-field, .ribbon-field{ display:none; }
   }
 
   h1.name{
@@ -492,6 +509,52 @@
       ember.style.animationDelay = '-' + (Math.random() * duration) + 's';
       field.appendChild(ember);
     }
+  })();
+
+  /* ============================================================
+     Random energy-surge ribbons — thin glowing streaks flash in at
+     random positions/angles/sizes, then re-randomize themselves on
+     every animation loop so they never repeat the same pattern.
+     ============================================================ */
+  (function(){
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const RIBBON_COUNT = 9;
+    const field = document.createElement('div');
+    field.className = 'ribbon-field';
+    field.setAttribute('aria-hidden', 'true');
+    document.body.prepend(field);
+
+    function randomizeRibbon(el){
+      const width = 140 + Math.random() * 260;
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight;
+      const rot = Math.random() * 360;
+      el.style.width = width + 'px';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.setProperty('--rx', '0px');
+      el.style.setProperty('--ry', '0px');
+      el.style.setProperty('--rrot', rot + 'deg');
+    }
+
+    for (let i = 0; i < RIBBON_COUNT; i++){
+      const ribbon = document.createElement('span');
+      ribbon.className = 'ribbon ' + (Math.random() < 0.65 ? 'c-orange' : 'c-cyan');
+      const duration = 2.6 + Math.random() * 3.2;
+      randomizeRibbon(ribbon);
+      ribbon.style.animationDuration = duration + 's';
+      ribbon.style.animationDelay = '-' + (Math.random() * duration) + 's';
+      ribbon.addEventListener('animationiteration', () => {
+        ribbon.className = 'ribbon ' + (Math.random() < 0.65 ? 'c-orange' : 'c-cyan');
+        randomizeRibbon(ribbon);
+      });
+      field.appendChild(ribbon);
+    }
+
+    window.addEventListener('resize', () => {
+      field.querySelectorAll('.ribbon').forEach(randomizeRibbon);
+    });
   })();
 
   /* ============================================================
